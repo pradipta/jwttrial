@@ -31,6 +31,7 @@ public class HelloResource {
 
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+            System.out.println("Passed");
         } catch (BadCredentialsException ex) {
             System.out.println("Failing here");
             throw new Exception("Wrong creds", ex);

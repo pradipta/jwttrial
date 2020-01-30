@@ -18,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Autowired
-    @Qualifier("myUserDetailsService")
     MyUserDetailsService myUserDetailsService;
 
     @Override
@@ -29,22 +28,15 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable();
-        http.authorizeRequests()
-                .antMatchers("/**")
+        http.cors().and().csrf().disable().authorizeRequests()
+                .antMatchers("/authenticate")
                 //.hasAnyRole("ADMIN", "USER")
                 .permitAll()
-                .and().httpBasic();
+                .anyRequest().authenticated();
     }
 
+    @Bean
     @Override
-    @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
-    public AuthenticationManager authenticationManager() throws Exception {
-        return this.authenticationManagerBean();
-    }
-
-    //@Bean(name = BeanIds.AUTHENTICATION_MANAGER)
-    //@Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
